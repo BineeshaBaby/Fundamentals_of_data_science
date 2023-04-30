@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Apr 24 20:44:48 2023
+Created on Sun Apr 30 22:28:56 2023
 
 @author: BINEESHA BABY
 """
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -12,10 +13,8 @@ from scipy.stats import percentileofscore
 def read_newborn_data(file_path):
     """
     Reads data from a CSV file without headers and returns a Pandas DataFrame object.
-
     Args:
     file_path (str): The path to the CSV file.
-
     Returns:
     Pandas DataFrame object: The data read from the CSV file.
     """
@@ -24,10 +23,8 @@ def read_newborn_data(file_path):
 def calculate_histogram(data_column):
     """
     Calculates the histogram of the given data column using the Freedman-Diaconis rule.
-
     Args:
     data_column (Pandas Series object): The data column to calculate the histogram for.
-
     Returns:
     Tuple: A tuple containing the histogram counts and bin edges.
     """
@@ -41,28 +38,28 @@ def calculate_histogram(data_column):
 def plot_histogram(hist, bin_edges, weights_mean, x_val):
     """
     Plots the histogram of the data, with vertical lines for the mean weight and the X value.
-
     Args:
     hist (numpy array): The histogram counts.
     bin_edges (numpy array): The bin edges for the histogram.
     weights_mean (float): The mean weight of the data.
     x_val (float): The value of X such that 75% of newborns from the distribution are born with a weight below X.
-
     Returns:
     None
     """
     legend_label = 'W_tilde = {:.2f}, X = {:.2f}'.format(weights_mean, x_val)
-    plt.hist(weights, bins=bin_edges, label=legend_label)
-    plt.xlabel("Newborn weight")
-    plt.ylabel("Count")
-    plt.title("Distribution of newborn weights", fontweight="bold") # Make title bold
-    plt.axvline(weights_mean, color='r', linestyle='--', label=r'$\tilde{W}$')
+    plt.bar(bin_edges[:-1], hist, width=bin_edges[1]-bin_edges[0], align='edge', edgecolor='black', alpha=0.8,label=legend_label)
+    plt.xlabel("Newborn weight", fontsize=12,fontweight="bold")
+    plt.ylabel("Count", fontsize=12,fontweight="bold")
+    plt.title("Distribution of newborn weights", fontsize=14, fontweight="bold") # Make title bold
+    plt.axvline(weights_mean, color='r', linestyle='--', label=r'$\tilde{W}$  (mean weight)')
     plt.axvline(x_val, color='g', linestyle='--', label='X')
-    plt.legend(loc='upper left', bbox_to_anchor=(0.7, 0.9))
+    plt.text(0.7, 1.2, '(25.00% of newborns are born with a weight below 3.80)', ha='center', va='center', transform=plt.gca().transAxes, fontsize=10)
+    plt.legend(loc='upper left', fontsize=10, bbox_to_anchor=(0.7, 0.9))
     plt.show()
 
+
 # Read in the data from the CSV file
-data = read_newborn_data("D:/data7.csv")
+data = read_newborn_data("D:/fundamentals/data7.csv")
 print(data)
 
 # Extract the column of data containing the newborn weights
@@ -90,4 +87,3 @@ print("{:.2f}% of newborns are born with a weight below {:.2f}.".format(percent_
 
 # Plot the histogram with labels and legend
 plot_histogram(hist, bin_edges, weights_mean, x_val)
-
